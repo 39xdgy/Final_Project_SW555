@@ -85,7 +85,15 @@ class Individual:
         return int(date[2]), monthList[date[1]], int(date[0])
 
     def dates_before_current_date(self):
-        pass
+        import datetime
+        if self._birthDate != 'N/A' and (datetime.datetime(*self._birthDate) > datetime.datetime.now()):
+            return "Error: date is after the current date"
+        if self._deathDate != 'N/A' and (datetime.datetime(*self._deathDate) > datetime.datetime.now()):
+            return "Error: date is after the current date"
+        if self._marriedDate != 'N/A' and (datetime.datetime(*self._marriedDate) > datetime.datetime.now()):
+            return "Error: date is after the current date"
+        if self._divorcedDate != 'N/A' and (datetime.datetime(*self._divorcedDate) > datetime.datetime.now()):
+            return "Error: date is after the current date"
 
     def birth_before_marriage(self):
         import datetime
@@ -148,7 +156,18 @@ class Individual:
         return True
 
     def parents_not_too_old(self):
-        pass
+        birth = self._children.get_birthDate()
+        if not self._family:
+            return False
+        father_birth = self._father.get_birthDate()
+        mother_birth = self._mother.get_birthDate()
+        father_diff = int((birth - father_birth).days / 365.25)
+        mother_diff = int((birth - mother_birth).days / 365.25)
+        if father_diff >= 80:
+            return True
+        if mother_diff >= 60:
+            return True
+        return False
 
 
     def aunts_and_uncles(self):
